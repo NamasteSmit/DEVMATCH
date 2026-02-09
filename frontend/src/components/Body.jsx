@@ -24,9 +24,7 @@ const Body = ()=>{
         }
 
     }
-
-
-
+    
     useEffect(()=>{
         if(!user)
         getLoggedInUser()

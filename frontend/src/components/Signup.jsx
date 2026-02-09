@@ -77,7 +77,7 @@ const SignupPage = () => {
                 type="text"
                 value={firstname}
                 onChange={(e)=>setFirstname(e.target.value)}
-                className="mt-1 block w-full border-gray-300 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 px-2 block w-full border-gray-300 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               />
               {errors.firstname && <p className="text-red-500 text-sm mt-1">{errors.firstname}</p>}
@@ -89,7 +89,7 @@ const SignupPage = () => {
                 type="text"
                 value={lastname}
                 onChange={(e)=>setLastname(e.target.value)}
-                className="mt-1 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 px-2 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required
               />
               {errors.lastname && <p className="text-red-500 text-sm  mt-1">{errors.lastname}</p>}
@@ -103,7 +103,7 @@ const SignupPage = () => {
               type="email"
               value={emailId}
               onChange={(e)=>setEmailId(e.target.value)}
-              className="mt-1 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 px-2 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               required
             />
              {errors.email && <p className="text-red-500 text-sm  mt-1">{errors.email}</p>}
@@ -117,7 +117,7 @@ const SignupPage = () => {
               type="password"
               value={password}
               onChange={(e)=>setPassword(e.target.value)}
-              className="mt-1 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 px-2 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               required
             />
             {errors.password && <p className="text-red-500 text-sm  mt-1">{errors.password}</p>}
@@ -131,7 +131,7 @@ const SignupPage = () => {
                 type="number"
                 value={age}
                 onChange={(e)=>setAge(e.target.value)}
-                className="mt-1 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 px-2 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
             <div className="w-1/2">
@@ -158,7 +158,7 @@ const SignupPage = () => {
               value={skills}
               onChange={(e)=>setSkills(e.target.value)}
               placeholder="e.g. React, Node.js, MongoDB"
-              className="mt-1 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 px-2 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
@@ -170,7 +170,7 @@ const SignupPage = () => {
               value={photoUrl}
               onChange={(e)=>setPhotoUrl(e.target.value)}
               placeholder="https://your-photo-url.com"
-              className="mt-1 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 px-2 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
@@ -182,7 +182,7 @@ const SignupPage = () => {
               value={about}
               onChange={(e)=>setAbout(e.target.value)}
               placeholder="Tell us about yourself..."
-              className="mt-1 block w-full border border-gray-300   rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 px-2 block w-full border border-gray-300   rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 

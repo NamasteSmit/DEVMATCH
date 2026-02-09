@@ -23,11 +23,11 @@ const Navbar = ({request}) => {
   return (
     <div className="navbar bg-base-100 shadow-sm border px-8">
       <div className="flex-1">
-        <Link to={'/'} className="btn btn-ghost text-3xl bg-gradient-to-r from-blue-800 via-blue-700 to to-blue-400 bg-clip-text text-transparent">Dev Tinder</Link>
+        <Link to={'/'} className="btn btn-ghost text-3xl bg-gradient-to-r from-blue-800 via-blue-700 to to-blue-400 bg-clip-text text-transparent">Hello Q</Link>
       </div>
       <div className="flex gap-2 items-center">
         <div>
-          <p className="font-medium">Welcome , {user && user?.firstname} 🔥</p>
+          <p className="font-medium">Welcome , {user && user?.firstname}</p>
         </div>
         <div className="dropdown dropdown-end">
           <div
@@ -35,11 +35,8 @@ const Navbar = ({request}) => {
             role="button"
             className="btn btn-ghost btn-circle avatar"
           >
-            <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src={user && user.photoUrl}
-              />
+            <div className="w-8 h-8 rounded-full">
+              <img src={ user.photoUrl || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaug-g5Z04tokddmyT_jagpcVo0IwR_EVMMcNuxo4GmHfpri1ZiqFuLxoS5vGNRXYx6m-qBcN3VnfySKzFgZSAOR27NNcsIgzjy9CjCl_b3w&s=10"}  />
             </div>
           </div>
           <ul
@@ -60,9 +57,9 @@ const Navbar = ({request}) => {
             </li>
           </ul>
         </div>
-       <Link to={'/requests'}><span className="text-xl ml-2 relative bg-gray-200 w-10 h-10 rounded-full flex justify-center items-center">
+       <Link to={'/requests'}><span className="text-xl ml-2 relative bg-gray-200/50 w-10 h-10 rounded-full flex justify-center items-center">
            🔔
-           <span className="absolute -top-2 font-semibold text-red-500 left-6">{request ? request.length : 0}</span>
+           <span className="absolute -top-2 font-semibold text-red-500 text-sm left-6">{request ? request.length : 0}</span>
           </span>
           </Link> 
       </div>

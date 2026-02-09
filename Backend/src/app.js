@@ -2,7 +2,7 @@ const dotenv = require('dotenv')
 dotenv.config();
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const PORT = 3003;
 const connectDB = require('./config/db');
 const UserRouter = require('./routes/auth');
 const ProfileRouter = require('./routes/profile');
@@ -18,8 +18,9 @@ const initializeSocket = require('./socket/socket');
 require('./utils/cronjob');
 
 app.use(cors({
-    origin : 'http://localhost:5173',
-    credentials : true
+    origin : 'http://localhost:5174',
+    credentials : true,
+    methods : ['GET','POST','PUT','DELETE','PATCH']
 }))
 app.use(cookieParser());
 app.use(express.json());
@@ -38,7 +39,7 @@ initializeSocket(server);
 connectDB().then(()=>{
     console.log("Database connected Successfully");
     server.listen(PORT,()=>{
-        console.log("Server listening on port : " , 3000);
+        console.log("Server listening on port : " , 3003);
     })
 }).catch((err)=>{
     console.log("Error connecting Database")
