@@ -27,12 +27,9 @@ jobs:
             cd DEVMATCH
             git pull origin main
 
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm use 18
-
             echo "Node version:"
             node -v 
+            npm -v
 
             echo "Installing Backend Dependencies..."
             cd Backend
