@@ -32,7 +32,7 @@ jobs:
             pm2 restart devmatch-backend
 
             echo "Building Frontend..."
-            cd ../frontend
+            cd DEVAMATCH/frontend
             npm ci
             npm run build
 
