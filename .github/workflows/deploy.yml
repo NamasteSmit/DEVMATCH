@@ -28,7 +28,11 @@ jobs:
             git pull origin main
 
             export NVM_DIR="$HOME/.nvm"
-            source ~/.bashrc
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use 18
+
+            echo "Node version:"
+            node -v 
 
             echo "Installing Backend Dependencies..."
             cd Backend
@@ -36,7 +40,7 @@ jobs:
             pm2 restart devmatch-backend
 
             echo "Building Frontend..."
-            cd DEVAMATCH/frontend
+            cd ../frontend
             npm ci
             npm run build
 
