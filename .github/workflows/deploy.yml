@@ -24,8 +24,13 @@ jobs:
             set -e
             echo "Starting Deployment..."
 
-            cd DEVMATCH
+            cd ~/DEVMATCH
             git pull origin main
+
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            nvm use 24
 
             echo "Node version:"
             node -v 
