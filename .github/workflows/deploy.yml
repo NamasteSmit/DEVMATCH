@@ -21,10 +21,14 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            set -e
             echo "Starting Deployment..."
 
             cd DEVMATCH
             git pull origin main
+
+            export NVM_DIR="$HOME/.nvm"
+            source ~/.bashrc
 
             echo "Installing Backend Dependencies..."
             cd Backend
