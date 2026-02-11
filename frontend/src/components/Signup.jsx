@@ -260,7 +260,7 @@ const handleUploadImage = async (e) => {
                 type="file"
                 onChange={handleUploadImage}
                 placeholder="https://your-photo-url.com"
-                className="mt-1 px-2 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 py-1.5 px-2 block w-full border-gray-300 border  rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
             <div className="">
