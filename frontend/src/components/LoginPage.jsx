@@ -101,7 +101,7 @@ const LoginPage = () => {
     <div className="min-h-screen bg-white flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white shadow-md rounded-xl p-8">
         <h2 className="text-2xl font-bold text-center mb-6">
-          Login with OTP
+          Login with <span className="bg-gradient-to-r from-red-500 to-blue-600 bg-clip-text text-transparent">OTP</span>
         </h2>
 
   
