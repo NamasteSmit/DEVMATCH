@@ -1,0 +1,46 @@
+name : CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name : Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name : Checkout Node
+        uses : actions/checkout@v3
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3  
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Starting Deployment..."
+
+            cd DEVMATCH
+            git pull origin main
+
+            echo "Installing Backend Dependencies..."
+            cd Backend
+            npm ci
+            pm2 restart devmatch-backend
+
+            echo "Building Frontend..."
+            cd ../frontend
+            npm ci
+            npm run build
+
+            echo "Updating Nginx Static Files..."
+            sudo rm -rf /var/www/html/*
+            sudo cp -r build/* /var/www/html/
+
+            sudo systemctl reload nginx
+
+            echo "Deployment Completed Successfully!"
+  
