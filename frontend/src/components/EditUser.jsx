@@ -13,8 +13,47 @@ const EditUser = ({ setIsEditable, user }) => {
   const [age, setAge] = useState(user.age);
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
   const [showToast, setShowToast] = useState(false);
+    const [preview, setPreview] = useState("");
+    const [loading , setLoading] = useState(false);
+
+    console.log('photototototot : ' , photoUrl)
+
   console.log("toast...",showToast)
   const dispatch = useDispatch();
+
+  const handleUploadImage = async (e) => {
+  try {
+    setLoading(true)
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // preview
+    const localPreview = URL.createObjectURL(file);
+    setPreview(localPreview);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await axios.post(
+      `${BASE_URL}/api/v1/image/upload-image`,
+      formData
+    );
+
+    const imageUrl = res.data.image.secure_url;
+
+    setPhotoUrl(imageUrl);
+
+    console.log("Uploaded:", imageUrl);
+
+    setTimeout(()=>{
+      setLoading(false);
+    },500)
+
+  } catch (err) {
+    console.error("Upload failed", err);
+  }
+};
+
 
   const handleChanges = async () => {
     const response = await axios.patch(
@@ -68,12 +107,18 @@ const EditUser = ({ setIsEditable, user }) => {
             PhotoUrl
           </label>
           <input
-            type="url"
+            type="file"
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={photoUrl}
-            onChange={(e) => setPhotoUrl(e.target.value)}
+            onChange={handleUploadImage}
             required
           />
+          {preview && (
+              <img
+                src={preview}
+                alt="Preview"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            )}
         </div>
         <div className="flex flex-col items-start">
           <label className="block mb-1 text-sm font-medium text-gray-700">
@@ -129,9 +174,10 @@ const EditUser = ({ setIsEditable, user }) => {
 
       {/* Button */}
       <button
+      disabled = {loading}
         onClick={handleChanges}
         type="submit"
-        className="mt-6 px-6 py-2 rounded-full bg-gradient-to-r from-pink-500 to-orange-400 text-white font-semibold shadow hover:scale-105 transition-transform"
+        className="disabled:cursor-not-allowed  mt-6 px-6 py-2 rounded-full bg-gradient-to-r from-pink-500 to-orange-400 text-white font-semibold shadow hover:scale-105 transition-transform"
       >
         Save Changes
       </button>

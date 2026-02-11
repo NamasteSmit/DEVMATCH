@@ -9,6 +9,7 @@ const ProfileRouter = require('./routes/profile');
 const ConnectionRequestRouter = require('./routes/requests')
 const ChatRouter = require('./routes/chat')
 const viewRouter = require('./routes/view');
+const ImageUploadRouter = require('./routes/upload');
 const cookieParser = require('cookie-parser'); 
 const cors = require('cors')
 //socket establishment
@@ -18,7 +19,7 @@ const initializeSocket = require('./socket/socket');
 require('./utils/cronjob');
 
 app.use(cors({
-    origin : 'http://localhost:5174',
+    origin : 'http://localhost:5173',
     credentials : true,
     methods : ['GET','POST','PUT','DELETE','PATCH']
 }))
@@ -30,6 +31,7 @@ app.use('/api/v1/profile', ProfileRouter);
 app.use('/api/v1/request' , ConnectionRequestRouter);
 app.use('/api/v1/view/user', viewRouter);
 app.use('/api/v1/user/chat',ChatRouter)
+app.use('/api/v1/image' , ImageUploadRouter)
 
 const server = http.createServer(app);
 

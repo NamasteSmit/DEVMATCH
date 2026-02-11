@@ -1,170 +1,283 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const signupSchema = require('../validators/auth-validators');
-const validator = require('validator');
-const bcrypt = require('bcrypt');
-const {User} = require("../models/user");
-const jwt = require('jsonwebtoken');
-const userAuth = require('../middlewares/auth');
+const signupSchema = require("../validators/auth-validators");
+const validator = require("validator");
+const bcrypt = require("bcrypt");
+const { User } = require("../models/user");
+const jwt = require("jsonwebtoken");
+const userAuth = require("../middlewares/auth");
+const { generateOTP } = require("../utils/generateOTP");
+const { transporter } = require("../utils/mail");
+// const validator = require("validator");
 
+router.post("/signup", async (req, res) => {
+  let {
+    firstname,
+    lastname,
+    password,
+    emailId,
+    age,
+    gender,
+    skills,
+    photoUrl,
+    about,
+  } = req.body;
 
-router.post('/signup', async(req,res)=>{
-    const {firstname , lastname , password , emailId , age , gender , skills,photoUrl,about} = req.body;
-    console.log("user Info : ",req.body)
-    if (typeof req.body.skills === 'string') {
-      req.body.skills = req.body.skills.split(',').map(s => s.trim());
-      }
-      console.log(skills);
-   
-     // check if user already exists or not
+  if (typeof skills === "string") {
+    skills = skills.split(",").map((s) => s.trim());
+  }
 
-     const userExists = await User.findOne({
-        emailId : emailId
-     })
-     
-     if(userExists){
-        return res.status(401).json({
-            success : false,
-            field : "exists",
-            message : "User already exists"
-        })
-     }
-
-    // input data sanitization
-    const validate = signupSchema.safeParse(req.body);
-   
-    if(!validate.success){
-        return res.status(401).json({
-            success : false,
-            message : validate.error.errors
-        })
-    }
- 
-    // checking if password is strong enough or not
-    const isStrongPassword = validator.isStrongPassword(password);
-    console.log(isStrongPassword)
-
-    if(!isStrongPassword){
-        return res.status(402).json({
-            success : false,
-            message : 'minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1'
-        })
-    }
-
-    // hash the password before storing
-    const hashedPassword = await bcrypt.hash(req.body.password,10);
-
-  
-    //store into database
-
-    try {
-        const newUser = await User.create({
-            firstname : firstname,
-            lastname : lastname,
-            emailId : emailId,
-            password : hashedPassword,
-            age : age,
-            gender : gender,
-            skills : skills,
-            photoUrl : photoUrl,
-            about : about
-        })
-
-        return res.status(200).json({
-            success : true,
-            message : 'User added successfully',
-            user : newUser
-        })
-        
-    }catch(err){
-        return res.status(500).json({
-            success : false,
-            message : 'Internal server error',
-            error : err
-        })
-    }
-    
-})
-
-
-router.post('/login', async(req,res)=>{
-    const {emailId , password} = req.body;
-
-    // check if user exists in DB
-    try{
-        const userExists = await User.findOne({
-            emailId : emailId
-        })
-
-        if(!userExists){
-            return res.status(403).json({
-                success : false,
-                message : 'Unauthorized User'
-            })
-        }
-
-        //if User Exists then check the password
-        const isPasswordValid = await bcrypt.compare(password,userExists.password);
-
-        if(!isPasswordValid){
-            return res.status(403).json({
-                success : false,
-                message : 'Invalid Password'
-            })
-        }
-
-        //create a token and set into cookie
-        const token = jwt.sign({userId : userExists._id , ip:req.ip},process.env.JWT_SECRET , {expiresIn : '1d'});
-        res.cookie('token' , token , {
-            maxAge : 24 * 3600000,
-            httpOnly : true
-        })
-
-        return res.status(200).json({
-            success : true,
-            message : "loggedIn successfully",
-            token : token,
-            user : userExists
-        })
-
-    }catch(err){
-        return res.status(404).json({
-            success : false,
-            message : "Invalide credentials",
-            errror  : err.message
-        })
-    }
-})
-
-
-router.post('/logout',(req,res)=>{
-    res.cookie('token',null,{
-        maxAge : -1
+  console.log("photo url in backend : " , photoUrl)
+  const isEmailValid = validator.isEmail(emailId);
+  console.log('isEmailValid : ' , isEmailValid)
+  if(!isEmailValid){
+    return res.status(400).json({
+      success : false,
+      message : "Invalid Email"
     })
+  }
+
+  if (!emailId.toLowerCase().endsWith(".com")) {
+  return res.status(400).json({
+    success: false,
+    field : "exists",
+    message: "invalid email address",
+  });
+}
+
+
+
+  const userExists = await User.findOne({ emailId });
+  if (userExists) {
+    return res.status(409).json({
+      success: false,
+      field: "exists",
+      message: "User already exists",
+    });
+  }
+
+  const numAge = Number(age);
+
+  const validate = signupSchema.safeParse({
+    firstname,
+    lastname,
+    password,
+    emailId,
+    numAge,
+    gender,
+    skills,
+    about,
+  });
+
+  if (!validate.success) {
+    return res.status(400).json({
+      success: false,
+      message: validate.error.errors,
+    });
+  }
+
+  if (password) {
+    const isStrongPassword = validator.isStrongPassword(password);
+    if (!isStrongPassword) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1",
+      });
+    }
+  }
+
+  const hashedPassword = password
+    ? await bcrypt.hash(password, 10)
+    : undefined;
+
+  try {
+    const newUser = await User.create({
+      firstname,
+      lastname,
+      emailId,
+      password: hashedPassword,
+      age,
+      gender,
+      skills,
+      photoUrl : photoUrl.secure_url,
+      about,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "User added successfully",
+      user: newUser,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: err.message,
+    });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  const { emailId, password } = req.body;
+
+  try {
+    const userExists = await User.findOne({ emailId });
+    if (!userExists || !userExists.password) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized User",
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      userExists.password
+    );
+
+    if (!isPasswordValid) {
+      return res.status(403).json({
+        success: false,
+        message: "Invalid Password",
+      });
+    }
+
+    const token = jwt.sign(
+      { userId: userExists._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.cookie("token", token, {
+      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+    });
 
     return res.status(200).json({
-        success : true,
-        message : "logged out successful"
-    })
-})
+      success: true,
+      message: "loggedIn successfully",
+      user: userExists,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Invalid credentials",
+    });
+  }
+});
 
-router.post('/verify',userAuth , (req,res)=>{
+router.post("/send-otp", async (req, res) => {
+  const email = req.body.email?.trim();
 
-    console.log('verifying..')
+  if (!email || !validator.isEmail(email)) {
+    return res.status(400).json({
+      success: false,
+      data: { error: "email not valid" },
+    });
+  }
 
-      const user = req.user;
+  const user = await User.findOne({ emailId: email });
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      data: { error: "user not found ! please create account" },
+    });
+  }
 
-      console.log('user' , user)  
+  const otp = generateOTP();
+  const otpHash = await bcrypt.hash(otp, 10);
+  const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-      return res.status(200).json({
-        success : true,
-        message : "user verified",
-        user : user
-      })
-})
+  await User.updateOne(
+    { emailId: email },
+    { otpHash, otpExpiresAt }
+  );
 
+  await transporter.sendMail({
+    from: `"OTP Login" <${process.env.GMAIL_USER}>`,
+    to: email,
+    subject: "Your OTP Code",
+    text: `Your OTP is ${otp}. It expires in 5 minutes.`,
+  });
 
+  return res.status(200).json({
+    success: true,
+    data: { message: "OTP sent successfully" },
+  });
+});
 
+router.post("/verify-otp", async (req, res) => {
+  const { email, otp } = req.body;
 
+  if (!email || !otp) {
+    return res.status(400).json({
+      success: false,
+      data: { error: "email and otp are required" },
+    });
+  }
+
+  const user = await User.findOne({ emailId: email });
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      data: { error: "user not found" },
+    });
+  }
+
+  if (!user.otpExpiresAt || user.otpExpiresAt < new Date()) {
+    return res.status(400).json({
+      success: false,
+      data: { error: "otp expired! request a new one" },
+    });
+  }
+
+  const isOtpValid = await bcrypt.compare(otp, user.otpHash);
+  if (!isOtpValid) {
+    return res.status(400).json({
+      success: false,
+      data: { error: "Invalid Otp" },
+    });
+  }
+
+  user.otpHash = null;
+  user.otpExpiresAt = null;
+  await user.save();
+
+  const token = jwt.sign(
+    { userId: user._id },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" }
+  );
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+    maxAge: 24 * 60 * 60 * 1000,
+  });
+
+  return res.status(200).json({
+    success: true,
+    data: { message: "user loggedIn successfully" },
+  });
+});
+
+router.post("/logout", (req, res) => {
+  res.cookie("token", null, { maxAge: -1 });
+  return res.status(200).json({
+    success: true,
+    message: "logged out successfully",
+  });
+});
+
+router.post("/verify", userAuth, (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "user verified",
+    user: req.user,
+  });
+});
 
 module.exports = router;

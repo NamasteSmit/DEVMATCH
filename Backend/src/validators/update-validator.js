@@ -6,7 +6,6 @@ const updateSchema = z.object({
     age: z.number().int().min(0).max(150),
     gender: z.enum(["male", "female"]),
     skills: z.array(z.string()),
-    photoUrl: z.string().url().optional(),
     about: z.string().max(500).optional(),
   }).partial(); // allows any subset
 

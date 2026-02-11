@@ -23,7 +23,7 @@ const SignUpSchema = zod.object({
     password   : zod
     .string()
     .min(6 , {message : "password must be atleast 6 characters long"})
-    .max(32 , {message : "too long password atmax 32 characters"})
+    .max(32 , {message : "too long password atmax 32 characters"}),
 
 })
 

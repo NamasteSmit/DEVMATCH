@@ -48,6 +48,7 @@ router.get('/:id',userAuth,async(req,res)=>{
 router.patch('/edit' , userAuth , async(req,res)=>{
 
     const updateFields = req.body;
+    const {photoUrl} = req.body;
     console.log("updatedield",updateFields)
 
     //here we wont allow user to update the email and password
@@ -82,7 +83,11 @@ router.patch('/edit' , userAuth , async(req,res)=>{
     try{
         const updatedUser = await User.findByIdAndUpdate({
             _id : req.user._id
-        },sanitizedData,{
+        },{
+          sanitizedData,
+          photoUrl : photoUrl.secure_url
+        }
+        ,{
             returnDocument : 'after'
         }).select("-password")
 
