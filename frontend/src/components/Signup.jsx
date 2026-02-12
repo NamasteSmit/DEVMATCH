@@ -252,7 +252,7 @@ const handleUploadImage = async (e) => {
 
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-red-500">
                 Photo URL
               </label>
               <input
@@ -302,9 +302,9 @@ const handleUploadImage = async (e) => {
         <p className="text-sm font-semibold text-center mt-2">
           Already a User ?{" "}
           <Link to={"/login"}>
-            <span className="text-blue-500 relative">
+            <span className="text-blue-500 relative group">
               Login
-              <span className="absolute left-0 -bottom-1 h-px w-full scale-x-0 hover:scale-x-100 transition-transform duration-200 origin-left bg-red-500"></span>
+              <span className="absolute left-0 -bottom-1 h-px w-full scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left bg-red-500"></span>
               </span>
           </Link>
         </p>
