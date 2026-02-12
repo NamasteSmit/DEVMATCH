@@ -183,8 +183,9 @@ const LoginPage = () => {
 
         <p className="text-sm text-center mt-4">
           New here?{" "}
-          <Link to="/signup" className="text-violet-500">
+          <Link to="/signup" className="text-violet-500 relative group">
             Signup
+            <span className="absolute h-px left-0 origin-left -bottom-1 w-full scale-x-0 group-hover:scale-x-100 transition-transform duration-200 bg-purple-500"></span>
           </Link>
         </p>
       </div>
