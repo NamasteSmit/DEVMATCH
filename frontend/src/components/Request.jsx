@@ -8,7 +8,7 @@ const Request = ({request})=>{
 
     const dispatch = useDispatch();
     const requests = useSelector(store=>store.request.request)
-    console.log(requests)
+    console.log("requestst ; " , requests)
  
     const getAllRequest = async()=>{
         try{
@@ -28,7 +28,7 @@ const Request = ({request})=>{
         <div className="flex flex-col items-start py-10">
             {
                requests.length < 1 ? <h1 className="text-center w-full font-semibold">No request</h1>  : requests.map((item)=>{
-                    return <RequestCard key={item.fromUserId._id} item={item}/>
+                    return <RequestCard key={item?.fromUserId?._id} item={item}/>
                 })
             }
         </div>

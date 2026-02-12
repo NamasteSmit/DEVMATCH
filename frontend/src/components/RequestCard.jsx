@@ -23,13 +23,13 @@ const RequestCard = ({item}) => {
     <div className="bg-white border-2 shadow-md rounded-lg flex items-center justify-between p-4 mb-4 w-full max-w-2xl mx-auto">
       <div className="flex items-center gap-4">
         <img 
-          src={item.fromUserId.photoUrl}
+          src={item?.fromUserId?.photoUrl}
           alt={``}
           className="w-16 h-16 rounded-full object-cover shadow-sm"
         />
         <div>
-          <h2 className="text-lg font-semibold">{item.fromUserId.firstname} {item.fromUserId.lastname}</h2>
-          <p className="text-sm text-gray-600 max-w-96">{item.fromUserId.about}</p>
+          <h2 className="text-lg font-semibold">{item?.fromUserId?.firstname} {item.fromUserId?.lastname}</h2>
+          <p className="text-sm text-gray-600 max-w-96">{item.fromUserId?.about}</p>
         </div>
       </div> 
       <div className="flex gap-2">
