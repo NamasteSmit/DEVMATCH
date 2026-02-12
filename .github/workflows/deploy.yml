@@ -40,11 +40,11 @@ jobs:
             echo "Installing Backend Dependencies..."
             cd Backend
             npm ci
-            
+
             if [ "${{ github.ref_name }}" = "main" ]; then
               pm2 restart devmatch-backend
             else
-              pm2 restart staging-server
+              pm2 restart staging-backend
             fi
 
             echo "Building Frontend..."
