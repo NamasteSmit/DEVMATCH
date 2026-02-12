@@ -26,7 +26,6 @@ jobs:
             echo "Deploying branch: ${{ github.ref }}"
 
             cd ~/DEVMATCH
-            git pull origin main
 
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
