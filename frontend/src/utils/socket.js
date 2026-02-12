@@ -1,12 +1,12 @@
 import io from "socket.io-client"
-import { BASE_URL } from "./constants"
+import { BASE_URL } from "./constants" //where  BASE_URL = "http://localhost:3003"
 
 
 export const createSocketConnection = ()=>{
     if(location.hostname==="localhost"){
        return io(BASE_URL)   // create a client socket that connects to the socketIO server
     }else{
-        return io('/' , {path : '/api/socket.io'}); // this is for when you upload on aws
+        return io(); // this is for when you upload on aws
     }
 }
 
