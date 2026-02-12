@@ -133,10 +133,7 @@ const handleUploadImage = async (e) => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl w-full bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-center text-3xl font-bold bg-gradient-to-r from-violet-500 to-blue-500 bg-clip-text text-transparent mb-6">
-          Create your <span className="relative">
-            account
-            <span className="absolute left-0 -bottom-1 origin-left w-full h-px bg-blue-200"></span>
-            </span>
+          Create your account
         </h2>
         <form className="space-y-4" onSubmit={handleSignup}>
           <div className="flex gap-4">
