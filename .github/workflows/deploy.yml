@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develope
 
 jobs:
   deploy:
@@ -17,12 +18,12 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3  
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ github.ref == 'refs/heads/main' && secrets.EC2_HOST || secrets.STAGING_HOST }}
           username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ github.ref == 'refs/heads/main' && secrets.EC2_SSH_KEY || secrets.STAGING_SSH_KEY }}
           script: |
             set -e
-            echo "Starting Deployment..."
+            echo "Deploying branch: ${{ github.ref }}"
 
             cd ~/DEVMATCH
             git pull origin main
@@ -39,7 +40,12 @@ jobs:
             echo "Installing Backend Dependencies..."
             cd Backend
             npm ci
-            pm2 restart devmatch-backend
+            
+            if [ "${{ github.ref_name }}" = "main" ]; then
+              pm2 restart devmatch-backend
+            else
+              pm2 restart staging-server
+            fi
 
             echo "Building Frontend..."
             cd ../frontend
