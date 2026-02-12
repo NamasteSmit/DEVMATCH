@@ -11,7 +11,7 @@ const requestSlice = createSlice({
         },
 
         removeFromRequest : (state,action)=>{
-            state.request = state.request.filter((user)=> user.fromUserId._id !== action.payload )
+            state.request = state.request.filter((user)=> user.fromUserId?._id !== action.payload )
         } 
     }
 })
