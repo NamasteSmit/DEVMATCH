@@ -252,7 +252,7 @@ const handleUploadImage = async (e) => {
 
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-red-500">
                 Photo URL
               </label>
               <input
