@@ -55,6 +55,9 @@ const Navbar = ({request}) => {
             <li>
               <Link onClick={handleLogout}>Logout</Link>
             </li>
+            <li>
+              <Link to={'/payment'}>Premium</Link>
+            </li>
           </ul>
         </div>
        <Link to={'/requests'}><span className="text-xl ml-2 relative bg-gray-200/50 w-10 h-10 rounded-full flex justify-center items-center">

@@ -28,6 +28,7 @@ router.post("/signup", async (req, res) => {
   }
 
   console.log("photo url in backend : " , photoUrl)
+
   const isEmailValid = validator.isEmail(emailId);
   console.log('isEmailValid : ' , isEmailValid)
   if(!isEmailValid){
@@ -45,9 +46,8 @@ router.post("/signup", async (req, res) => {
   });
 }
 
-
-
   const userExists = await User.findOne({ emailId });
+  
   if (userExists) {
     return res.status(409).json({
       success: false,
