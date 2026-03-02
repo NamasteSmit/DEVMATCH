@@ -15,6 +15,7 @@ import Connection from "./components/Connection";
 import Request from "./components/Request";
 import SignupPage from "./components/Signup";
 import Chat from "./components/Chat";
+import Premium from "./components/Premium";
 function App() {
   return (
     <>
@@ -29,6 +30,7 @@ function App() {
               <Route path="/connections" element={<Connection/>}/>
               <Route path="/requests" element={<Request/>}/>
               <Route path="/chat/:id" element={<Chat/>}/>
+              <Route path="/payment" element={<Premium/>}/>
             </Route>
           </Route>
         </Routes>

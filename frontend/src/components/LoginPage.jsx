@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [otpError, setOtpError] = useState("");
-
+  
   const [otp, setOtp] = useState(Array(6).fill(""));
   const inputRef = useRef([]);
 

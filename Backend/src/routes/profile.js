@@ -48,8 +48,11 @@ router.get('/:id',userAuth,async(req,res)=>{
 router.patch('/edit' , userAuth , async(req,res)=>{
 
     const updateFields = req.body;
+    console.log(updateFields)
     const {photoUrl} = req.body;
     console.log("updatedield",updateFields)
+
+    console.log("useuresr : " , req.user)
 
     //here we wont allow user to update the email and password
     const ALLOWED_UPDATES = ["firstname" , "lastname" , "age" , "gender" , "skills" , "photoUrl" , "about"];
@@ -61,6 +64,8 @@ router.patch('/edit' , userAuth , async(req,res)=>{
             message : "Fields you are trying to update cannot be updated"
         })
     }
+
+    //   console.log(typeof req.body.skills.join(","))
     
       if (typeof req.body.skills === 'string') {
       req.body.skills = req.body.skills.split(',').map(s => s.trim());
@@ -80,16 +85,19 @@ router.patch('/edit' , userAuth , async(req,res)=>{
 
     const sanitizedData = validation.data;
 
+    console.log("sanitized data : ",sanitizedData)
+
+    console.log("req user : " , req.user._id)
+
+
     try{
         const updatedUser = await User.findByIdAndUpdate({
             _id : req.user._id
         },{
-          sanitizedData,
-          photoUrl : photoUrl.secure_url
-        }
-        ,{
-            returnDocument : 'after'
-        }).select("-password")
+          $set : sanitizedData,
+        },{returnDocument : "after"}).select("-password")
+
+        console.log("updated user : " , updatedUser)
 
         return res.status(200).json({
             success : true,
