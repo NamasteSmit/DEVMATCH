@@ -50,6 +50,7 @@ router.patch('/edit' , userAuth , async(req,res)=>{
     const updateFields = req.body;
     console.log(updateFields)
     const {photoUrl} = req.body;
+    console.log("photourl : " , photoUrl)
     console.log("updatedield",updateFields)
 
     console.log("useuresr : " , req.user)
@@ -111,7 +112,6 @@ router.patch('/edit' , userAuth , async(req,res)=>{
         })
     }
 })
-
 
 router.patch('/verify-password',userAuth, async(req,res)=>{
      const {oldPassword , confirmOldPassword} = req.body;
